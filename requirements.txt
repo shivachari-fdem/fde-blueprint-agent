@@ -1,1 +1,7 @@
-google-adk
+fastapi==0.139.0
+uvicorn==0.50.2
+python-dotenv==1.2.2
+google-cloud-aiplatform==1.159.0
+google-genai==2.10.0
+pydantic==2.13.4
+aiosqlite==0.22.1
