@@ -18,7 +18,7 @@ Engineers and business leaders often spend hours digging through documentation a
 * **Context & Memory:** Completely stateless & scalable! Context is securely persisted to a highly-available **PostgreSQL database (Cloud SQL)** via `asyncpg`, surviving Cloud Run container scaling natively.
 * **Orchestration & Logic:** Implements an advanced Multi-Agent architecture (`gemini-2.5-flash`): an **Intent Router** accurately scopes prompts and dispatches to specialized agents, backed by prompt injection guardrails.
 * **Observability & Tracing:** Full execution transparency. Every tool invocation logs trace metadata (Execution time, unique `trace_ids`) directly inside UI expanders.
-* **Infrastructure & CI/CD:** Hardened for production! A ready-to-use **GitHub Actions pipeline** automatically builds, authenticates, pushes to Artifact Registry, and deploys directly to Google Cloud Run on every push to `main`.
+* **Infrastructure & CI/CD:** Hardened for production! Includes full **Infrastructure as Code (IaC) configurations using Terraform** to provision Cloud SQL and Cloud Run resources programmatically. A **GitHub Actions pipeline** automatically runs tests, applies Terraform, builds the Docker image, and deploys to Google Cloud on every push to `main`.
 
 ---
 

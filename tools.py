@@ -18,6 +18,15 @@ def _generate_metadata(tool_name: str, start_time: float) -> dict:
     }
 
 def lookup_gcp_service(args_json: str) -> str:
+    """
+    Looks up a Google Cloud service from the internal FDE database.
+    
+    Args:
+        args_json (str): A JSON string containing the 'service_name' argument.
+        
+    Returns:
+        str: A JSON string containing the service description and matching status.
+    """
     start_time = time.time()
     with tracer.start_as_current_span("lookup_gcp_service") as span:
         span.set_attribute("tool.name", "lookup_gcp_service")
@@ -66,6 +75,15 @@ def lookup_gcp_service(args_json: str) -> str:
             })
 
 def get_cost_estimate(args_json: str) -> str:
+    """
+    Estimates the monthly cost of a Google Cloud service based on its usage tier.
+    
+    Args:
+        args_json (str): A JSON string containing 'service_name' and 'usage_tier' (High, Medium, Low).
+        
+    Returns:
+        str: A JSON string containing the estimated monthly cost in USD.
+    """
     start_time = time.time()
     with tracer.start_as_current_span("get_cost_estimate") as span:
         span.set_attribute("tool.name", "get_cost_estimate")
