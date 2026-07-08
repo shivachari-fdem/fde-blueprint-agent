@@ -5,3 +5,6 @@ google-cloud-aiplatform==1.159.0
 google-genai==2.10.0
 pydantic==2.13.4
 aiosqlite==0.22.1
+streamlit==1.41.1
+asyncpg==0.29.0
+google-cloud-secret-manager==2.22.0

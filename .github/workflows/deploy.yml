@@ -1,0 +1,50 @@
+name: Build and Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: vital-octagon-19612 # Note: Ensure you update this to your actual project ID
+  REGION: us-central1
+  SERVICE_NAME: fde-blueprint-agent
+  # Ensure you create an Artifact Registry repository named 'cloud-run-source-deploy'
+  REPOSITORY: cloud-run-source-deploy
+
+jobs:
+  deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          # IMPORTANT: Update these to your actual Workload Identity Provider and Service Account
+          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/github-actions/providers/github-actions'
+          service_account: 'cloud-run-deployer@vital-octagon-19612.iam.gserviceaccount.com'
+
+      - name: Configure Docker to use Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+          
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_PATH="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
+          docker build -t $IMAGE_PATH .
+          docker push $IMAGE_PATH
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          region: ${{ env.REGION }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          env_vars: |-
+            GCP_PROJECT_ID=${{ env.PROJECT_ID }}

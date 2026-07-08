@@ -142,10 +142,10 @@ class FDEOrchestrator:
         history = await self.memory.get_formatted_history()
         vertex_history = [Part.from_text(msg["content"]) for msg in history if msg["role"] in ["user", "assistant"]]
         
-        chat = active_model.start_chat()
+        self.current_chat = active_model.start_chat()
         
         try:
-            response = chat.send_message(user_input)
+            response = self.current_chat.send_message(user_input)
             
             # Intercept Tool Calls
             if response.candidates and response.candidates[0].function_calls:
@@ -165,7 +165,7 @@ class FDEOrchestrator:
                 
                 # Low-Stakes Execution
                 logger.info(f"Executing low-stakes tool '{func_name}'...")
-                return await self.execute_and_reply(chat, func_name, args_dict)
+                return await self.execute_and_reply(func_name, args_dict)
                 
             else:
                 reply = response.text
@@ -176,7 +176,7 @@ class FDEOrchestrator:
             logger.error(f"Error processing request: {e}")
             return {"status": "error", "message": str(e)}
 
-    async def execute_and_reply(self, active_chat, func_name: str, args_dict: dict) -> dict:
+    async def execute_and_reply(self, func_name: str, args_dict: dict) -> dict:
         """Executes the tool and passes the result back to the specific agent."""
         try:
             args_json = json.dumps(args_dict)
@@ -190,7 +190,7 @@ class FDEOrchestrator:
             await self.memory.add_message(role="tool", content=tool_result)
             
             logger.info(f"Sending {func_name} result back to specialist...")
-            final_response = active_chat.send_message(
+            final_response = self.current_chat.send_message(
                 Part.from_function_response(name=func_name, response={"content": tool_result})
             )
             

@@ -14,5 +14,5 @@ COPY . .
 # Expose port 8080 (Cloud Run's default)
 EXPOSE 8080
 
-# Command to run the FastAPI server
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8080"]
+# Command to run the Streamlit server
+CMD ["streamlit", "run", "app.py", "--server.port", "8080", "--server.address", "0.0.0.0"]
