@@ -8,3 +8,7 @@ aiosqlite==0.22.1
 streamlit==1.41.1
 asyncpg==0.29.0
 google-cloud-secret-manager==2.22.0
+python-json-logger==2.0.7
+opentelemetry-api==1.22.0
+opentelemetry-sdk==1.22.0
+pytest==8.0.0
