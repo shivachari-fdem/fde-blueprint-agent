@@ -1,0 +1,14 @@
+[
+  {
+    "input": "I have a budget of $500, can you estimate pricing for high traffic Cloud Spanner?",
+    "expected_intent": "FINANCE"
+  },
+  {
+    "input": "Hi my name is John Smith (jsmith@google.com). Tell me how Google Compute Engine works.",
+    "expected_intent": "RESEARCH"
+  },
+  {
+    "input": "Hello! What is your name and what can you do?",
+    "expected_intent": "GENERAL"
+  }
+]

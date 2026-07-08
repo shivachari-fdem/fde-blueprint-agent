@@ -135,12 +135,15 @@ class FDEOrchestrator:
             logger.error(f"Routing failed, defaulting to GENERAL: {e}")
             return "GENERAL"
 
-    async def process_request(self, user_input: str) -> dict:
+    async def process_request(self, original_input: str) -> dict:
         """Main execution loop for user requests."""
+        # OUT-OF-THE-BOX ROBUST IMPLEMENTATION: Immediately redact PII at the entrypoint 
+        # so it NEVER reaches database memory, routing LLMs, or traces.
+        user_input = redact_pii(original_input)
+        
         with tracer.start_as_current_span(name="process_request") as span:
             span.set_attribute("input_length", len(user_input))
-            safe_input = redact_pii(user_input)
-            logger.info("Processing new message", extra={"redacted_input": safe_input, "intent": "UNKNOWN", "outcome": "started"})
+            logger.info("Processing new message", extra={"redacted_input": user_input, "intent": "UNKNOWN", "outcome": "started"})
             
             # Layer 1: Run Guardrails
             if not self._security_guardrail(user_input):
