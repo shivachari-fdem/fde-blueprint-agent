@@ -13,7 +13,7 @@ Engineers and business leaders often spend hours digging through documentation a
 2. **Generating on-the-fly Cost Estimates**.
 3. **Ensuring Security & Oversight** through an automated guardrail system that forces risky or high-stakes operations (like finance calculations) into a Human-In-The-Loop approval wait-state.
 
-## 🚀 Key Features (Scoring 95/95)
+## 🚀 Key Features 
 * **Tool & Interface Design:** A responsive frontend built with **Streamlit** that intuitively integrates chat functionality, metadata observation, and interactive approval flows.
 * **Context & Memory:** Completely stateless & scalable! Context is securely persisted to a highly-available **PostgreSQL database (Cloud SQL)** via `asyncpg`, surviving Cloud Run container scaling natively.
 * **Orchestration & Logic:** Implements an advanced Multi-Agent architecture (`gemini-2.5-flash`): an **Intent Router** accurately scopes prompts and dispatches to specialized agents, backed by prompt injection guardrails.
